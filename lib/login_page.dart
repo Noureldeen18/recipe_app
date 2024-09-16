@@ -1,94 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _loginUser() async {
+    try {
+      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      if (userCredential.user != null) {
+        // User logged in successfully, navigate to home page
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login successful!')),
+        );
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed. Please try again.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F4FA),
+      backgroundColor: Color(0xFFf6f4fa), // Background color
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Color(0xFF3c444c)), // Dark text color
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Welcome Back!',
-              style: TextStyle(
+            Text(
+              'Login',
+              style: GoogleFonts.poppins(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF3C444C),
+                color: Color(0xFF3c444c), // Dark text color
               ),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              'Login to continue',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFF3C444C),
-              ),
-            ),
-            const SizedBox(height: 30),
+            SizedBox(height: 20),
+            // Email Field
             TextField(
+              controller: _emailController,
               decoration: InputDecoration(
-                hintText: 'Email',
-                filled: true,
+                labelText: 'Email',
+                border: OutlineInputBorder(),
                 fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
+                filled: true,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 15),
+            // Password Field
             TextField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
-                hintText: 'Password',
-                filled: true,
+                labelText: 'Password',
+                border: OutlineInputBorder(),
                 fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
+                filled: true,
               ),
             ),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle login action here
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  backgroundColor: const Color(0xFFF96163), // Button color
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
+            SizedBox(height: 30),
             Center(
-              child: TextButton(
-                onPressed: () {
-                  // Handle navigation to the registration page
+              child: ElevatedButton(
+                onPressed: _loginUser,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFf96163), // Primary color
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  textStyle: GoogleFonts.poppins(fontSize: 18),
+                ),
+                child: Text('Log In'),
+              ),
+            ),
+            SizedBox(height: 15),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/register');
                 },
-                child: const Text(
-                  "Don't have an account? Sign up",
-                  style: TextStyle(
-                    color: Color(0xFFF96163),
-                    fontWeight: FontWeight.bold,
+                child: Text(
+                  'Don\'t have an account? Sign up',
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    color: Color(0xFFf96163),
                   ),
                 ),
               ),

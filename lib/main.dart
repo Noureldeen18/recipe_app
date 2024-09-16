@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart';  // Import the LoginPage from login_page.dart
+import 'package:firebase_core/firebase_core.dart'; // Import Firebase core
+import 'login_page.dart';
+import 'register_page.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();  // Ensure Flutter is initialized before Firebase
+  await Firebase.initializeApp();             // Initialize Firebase
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Recipe App',
       theme: ThemeData(
-        primaryColor: const Color(0xFFF96163), // Main color
-        fontFamily: 'Poppins', // Default font
+        primaryColor: Color(0xFFf96163),
+        fontFamily: 'Poppins',
       ),
-      home: const LoginPage(), // First page of the app
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
+      },
     );
   }
 }
