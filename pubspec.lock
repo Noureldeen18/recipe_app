@@ -280,6 +280,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  loginpage:
+    dependency: "direct main"
+    description:
+      name: loginpage
+      sha256: "515564642873e5c44cc45391af8c4bda82b6c6af3e59d4300674ba27df0a0324"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   matcher:
     dependency: transitive
     description:

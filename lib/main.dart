@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart'; // Import Firebase core
 import 'login_page.dart';
-import 'register_page.dart';
+// import 'register_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();  // Ensure Flutter is initialized before Firebase
@@ -9,20 +9,19 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyApp() ;
+}
+
+class _MyApp extends State<MyApp>{
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Recipe App',
-      theme: ThemeData(
-        primaryColor: Color(0xFFf96163),
-        fontFamily: 'Poppins',
-      ),
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => LoginPage(),
-        '/register': (context) => RegisterPage(),
-      },
-    );
+  return MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: LoginPage(),
+  );
   }
 }
+
+
