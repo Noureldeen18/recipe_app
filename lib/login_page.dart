@@ -4,6 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -26,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       print(e); // Handle errors properly in production apps
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed. Please check your credentials.')),
+        const SnackBar(content: Text('Login failed. Please check your credentials.')),
       );
     }
     setState(() {
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       print(e); // Handle errors properly in production apps
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Google Sign-In failed.')),
+        const SnackBar(content: Text('Google Sign-In failed.')),
       );
     }
     setState(() {
@@ -64,16 +66,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF6F4FA),
+      backgroundColor: const Color(0xFFF6F4FA),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
+                  const Text(
                     'Welcome Back!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -83,12 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                       fontFamily: 'Poppins',
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      labelStyle: TextStyle(color: Color(0xFF3C444C)),
+                      labelStyle: const TextStyle(color: Color(0xFF3C444C)),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -96,13 +98,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      labelStyle: TextStyle(color: Color(0xFF3C444C)),
+                      labelStyle: const TextStyle(color: Color(0xFF3C444C)),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -110,43 +112,43 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: _loginWithEmail,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFf96163),
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: const Color(0xFFf96163),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Login',
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: _loginWithGoogle,
                     icon: Image.asset(
                       'assets/google_logo.png', // Add Google logo image to assets
                       height: 24,
                     ),
-                    label: Text('Sign in with Google'),
+                    label: const Text('Sign in with Google'),
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.black, backgroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: Colors.black12),
+                        side: const BorderSide(color: Colors.black12),
                       ),
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Don't have an account?",
                         style: TextStyle(fontFamily: 'Poppins'),
                       ),
@@ -157,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                             MaterialPageRoute(builder: (context) => RegisterPage()),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'Register',
                           style: TextStyle(
                             fontFamily: 'Poppins',

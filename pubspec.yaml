@@ -41,7 +41,7 @@ dependencies:
   google_sign_in: ^6.2.1
   google_fonts: ^6.2.1
   loginpage: ^0.0.1
-  http: ^0.13.3
+  http: ^1.2.2
 
 
 dev_dependencies:
