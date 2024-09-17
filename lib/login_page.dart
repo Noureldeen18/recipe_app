@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'register_page.dart';
+import 'register_page.dart'; // Ensure this import is present
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -121,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      foregroundColor: Colors.white, // Text color
                     ),
                     child: const Text(
                       'Login',
@@ -136,7 +137,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     label: const Text('Sign in with Google'),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black, backgroundColor: Colors.white,
+                      foregroundColor: Colors.black, // Icon and text color
+                      backgroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -154,16 +156,15 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => RegisterPage()),
-                          );
+                          Navigator.pushNamed(context, '/register');
                         },
+                        style: TextButton.styleFrom(
+                          foregroundColor: const Color(0xFFf96163), // Text color
+                        ),
                         child: const Text(
                           'Register',
                           style: TextStyle(
                             fontFamily: 'Poppins',
-                            color: Color(0xFFf96163),
                           ),
                         ),
                       ),
