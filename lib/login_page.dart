@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'register_page.dart'; // Ensure this import is present
+// Ensure this import is present
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

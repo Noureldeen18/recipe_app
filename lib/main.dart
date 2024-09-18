@@ -6,7 +6,7 @@ import 'register_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();  // Ensure Flutter is initialized before Firebase
   await Firebase.initializeApp();             // Initialize Firebase
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -24,7 +24,7 @@ class _MyApp extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(),
+        '/': (context) => const LoginPage(),
         '/register': (context) => RegisterPage(),
       },
     );
