@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart'; // Import Firebase core
+import 'package:recipe_app/recipe_menu_page.dart';
+import 'package:recipe_app/recipe_view_page.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 
@@ -20,8 +22,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: {
-        '/login': (context) => LoginPage(),
-        '/register': (context) => RegisterPage(),
+        '/login': (context) => Test(),
+        '/register': (context) => MealDetailScreen(idMeal: '1',),
       },
     );
   }

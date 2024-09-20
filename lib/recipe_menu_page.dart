@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:recipe_app/recipe_view_page.dart';
 import 'dio_helper.dart';
 
-class menu_view extends StatefulWidget {
-  const menu_view({super.key});
+class Test extends StatefulWidget {
+  const Test({super.key});
 
   @override
-  State<menu_view> createState() => _MenuViewState();
+  State<Test> createState() => _MenuViewState();
 }
 
-class _MenuViewState extends State<menu_view> {
+class _MenuViewState extends State<Test> {
   List<String> categories = [];
   List<Map<String, String>> meals = [];  // Store meals for the selected category
   int _selectedIndex = 0;
