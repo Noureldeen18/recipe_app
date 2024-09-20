@@ -1,71 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'login_page.dart';
 
 class ProfilePage extends StatelessWidget {
-  final User? user = FirebaseAuth.instance.currentUser;
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
-        backgroundColor: Color(0xFFf96163), // Your primary color
+        title: const Text('Profile', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: user?.photoURL != null
-                  ? NetworkImage(user!.photoURL!)
-                  : AssetImage('assets/profile_placeholder.png') as ImageProvider,
-            ),
-            SizedBox(height: 20),
-            Text(
-              user?.displayName ?? 'No Name',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Profile Photo
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage('assets/placeholder_image.png'), // Placeholder for profile image
+                backgroundColor: Colors.grey[200],
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              user?.email ?? 'No Email',
-              style: TextStyle(
-                fontSize: 18,
-                fontFamily: 'Poppins',
-                color: Colors.grey[600],
-              ),
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: Text('Logout'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFf96163), // Primary color
-                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 80),
-                textStyle: TextStyle(
+              const SizedBox(height: 20),
+              // Full Name
+              const Text(
+                'Full Name',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'Poppins',
-                  fontSize: 16,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              // Email
+              const Text(
+                'email@example.com',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              const SizedBox(height: 30),
+              // Edit Profile Button
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to Edit Profile Page
+                  // Placeholder for now
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFf96163), // Use your primary color
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 80),
+                  textStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                child: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
         ),
       ),
     );
