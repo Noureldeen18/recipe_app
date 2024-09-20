@@ -40,6 +40,11 @@ dependencies:
   cloud_firestore: ^5.4.1
   google_sign_in: ^6.2.1
   google_fonts: ^6.2.1
+  loginpage: ^0.0.1
+  http: ^1.2.2
+  image_picker: ^1.1.2
+  shared_preferences: ^2.3.2
+
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +68,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/google_logo.png
+
+
 fonts:
     - family: Poppins
       fonts:
