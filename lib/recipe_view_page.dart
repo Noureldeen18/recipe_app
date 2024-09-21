@@ -14,6 +14,8 @@ class MealDetailScreen extends StatefulWidget {
 
 class _MealDetailScreenState extends State<MealDetailScreen> {
   Map<String, dynamic>? mealDetails;
+  Set<String> favoriteMeals = Set<String>();
+  List<Map<String, String>> meals = []; // Store meals for the selected category
 
 
   @override
@@ -43,6 +45,44 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
         backgroundColor: Color(0xfffdcbcb),
         title: Text(mealDetails != null ? mealDetails!['strMeal'] : 'Loading...'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (mealDetails != null) {
+                final isFavorite = favoriteMeals.contains(mealDetails!['idMeal']);
+
+                setState(() {
+                  if (isFavorite) {
+                    favoriteMeals.remove(mealDetails!['idMeal']);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Removed from Favorites"),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.black.withOpacity(0.5),
+                      ),
+                    );
+                  } else {
+                    favoriteMeals.add(mealDetails!['idMeal']);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Added To Favorites"),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.black.withOpacity(0.5),
+                      ),
+                    );
+                  }
+                });
+              }
+            },
+            icon: Icon(
+              Icons.favorite,
+              color: mealDetails != null && favoriteMeals.contains(mealDetails!['idMeal'])
+                  ? Colors.red
+                  : Colors.grey,
+            ),
+          )
+
+        ],
       ),
       body: mealDetails == null
           ? Center(child: CircularProgressIndicator())
