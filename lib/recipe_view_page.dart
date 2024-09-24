@@ -6,7 +6,7 @@ import 'dio_helper.dart';
 class MealDetailScreen extends StatefulWidget {
   final String idMeal;
 
-  MealDetailScreen({required this.idMeal});
+  const MealDetailScreen({super.key, required this.idMeal});
 
   @override
   _MealDetailScreenState createState() => _MealDetailScreenState();
@@ -40,12 +40,12 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xfffdcbcb),
+        backgroundColor: const Color(0xfffdcbcb),
         title: Text(mealDetails != null ? mealDetails!['strMeal'] : 'Loading...'),
         centerTitle: true,
       ),
       body: mealDetails == null
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,14 +59,14 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 mealDetails!['strMeal'],
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text(
                 'Ingredients',
                 style: TextStyle(
@@ -87,12 +87,12 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                     return Text(
                         '- $ingredient (${measure ?? ''})');
                   }
-                  return SizedBox();
+                  return const SizedBox();
                 }),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text(
                 'Instructions',
                 style: TextStyle(

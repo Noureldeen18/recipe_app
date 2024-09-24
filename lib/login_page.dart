@@ -1,77 +1,160 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:recipe_app/recipe_menu_page.dart';
+import 'package:recipe_app/register_page.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final ValueNotifier<bool> _isObscure = ValueNotifier(true);
+  String? _errorMessage;
+
+  Future<void> _login() async {
+    setState(() {
+      _errorMessage = null; // Clear previous error message
+    });
+
+    // Validate input
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = "Please fill in all fields.";
+      });
+      return;
+    }
+
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Test()),
+      );
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(25.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 const Text(
-                  'Login',
+                  "Welcome",
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
+                    color: Color(0xff36444c),
                   ),
-                ),
-                const SizedBox(height: 20),
-                // Email TextField
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Password TextField
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  obscureText: true,
                 ),
                 const SizedBox(height: 30),
-                // Login Button
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Profile Page after Login
-                    Navigator.pushReplacementNamed(context, '/profile');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFf96163), // Use your primary color
-                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 80),
-                    textStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                TextField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    labelStyle: TextStyle(color: Colors.grey[700]),
+                    prefixIconColor: Color(0xFFF96163),
+                    border: const OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.email),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFF96163)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFF96163)),
+                    ),
                   ),
-                  child: const Text('Login', style: TextStyle(color: Colors.white)),
                 ),
                 const SizedBox(height: 20),
-                // Register Navigation
-                TextButton(
-                  onPressed: () {
-                    // Navigate to Register Page
-                    Navigator.pushNamed(context, '/register');
+                ValueListenableBuilder(
+                  valueListenable: _isObscure,
+                  builder: (context, bool isObscure, child) {
+                    return TextField(
+                      controller: _passwordController,
+                      obscureText: isObscure,
+                      keyboardType: TextInputType.visiblePassword,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        labelStyle: TextStyle(color: Colors.grey[700]),
+                        prefixIcon: const Icon(Icons.lock),
+                        prefixIconColor: Color(0xFFF96163),
+                        suffixIcon: IconButton(
+                          icon: Icon(isObscure ? Icons.visibility : Icons.visibility_off),
+                          onPressed: () {
+                            _isObscure.value = !_isObscure.value;
+                          },
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFF96163)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFF96163)),
+                        ),
+                      ),
+                    );
                   },
-                  child: const Text(
-                    'Don’t have an account? Register',
-                    style: TextStyle(fontFamily: 'Poppins'),
+                ),
+                if (_errorMessage != null) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    _errorMessage!,
+                    style: TextStyle(color: Colors.red),
                   ),
+                ],
+                const SizedBox(height: 40),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF96163),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  width: double.infinity,
+                  child: MaterialButton(
+                    onPressed: _login,
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Don't have an account?",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegisterPage()),
+                        );
+                      },
+                      child: const Text(
+                        "Register Now",
+                        style: TextStyle(color: Color(0xFFF96163), fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

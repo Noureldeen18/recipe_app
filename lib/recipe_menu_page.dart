@@ -58,17 +58,17 @@ class _MenuViewState extends State<Test> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xfffdcbcb),
+        backgroundColor: const Color(0xfffdcbcb),
         leading: IconButton(
           onPressed: () {},
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           color: Colors.black,
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.notification_add),
-            color: Color(0xFFf96163),
+            icon: const Icon(Icons.notification_add),
+            color: const Color(0xFFf96163),
           ),
         ],
       ),
@@ -76,18 +76,18 @@ class _MenuViewState extends State<Test> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20.0),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+          const SizedBox(height: 20.0),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0),
             child: Text(
               "Easy To Cook Menu",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
               textAlign: TextAlign.start,
             ),
           ),
-          SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+          const SizedBox(height: 40),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0),
             child: Text(
               "Category",
               style: TextStyle(
@@ -96,7 +96,7 @@ class _MenuViewState extends State<Test> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           // Display category buttons
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -113,7 +113,7 @@ class _MenuViewState extends State<Test> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _selectedIndex == index
-                          ? Color(0xFFf96163)
+                          ? const Color(0xFFf96163)
                           : Colors.white,
                     ),
                     child: Text(categories[index]),
@@ -122,12 +122,12 @@ class _MenuViewState extends State<Test> {
               }),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           // Display meals in a GridView
           Expanded(
             child: GridView.builder(
-              padding: EdgeInsets.all(10.0),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              padding: const EdgeInsets.all(10.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,  // 2 items per row
                 crossAxisSpacing: 5.0,
                 mainAxisSpacing: 5.0,
@@ -156,11 +156,11 @@ class _MenuViewState extends State<Test> {
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Text(
                             meals[index]['strMeal']!,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 10),
                           ),
                         ],

@@ -24,7 +24,7 @@ class ProfilePage extends StatelessWidget {
               // Profile Photo
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/placeholder_image.png'), // Placeholder for profile image
+                backgroundImage: const AssetImage('assets/placeholder_image.png'), // Placeholder for profile image
                 backgroundColor: Colors.grey[200],
               ),
               const SizedBox(height: 20),
