@@ -14,16 +14,19 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final ValueNotifier<bool> _isObscure = ValueNotifier(true);
   String? _errorMessage;
+  bool _isLoading = false;
 
   Future<void> _login() async {
     setState(() {
       _errorMessage = null; // Clear previous error message
+      _isLoading = true;    // Show loading indicator
     });
 
     // Validate input
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       setState(() {
         _errorMessage = "Please fill in all fields.";
+        _isLoading = false;
       });
       return;
     }
@@ -35,11 +38,12 @@ class _LoginPageState extends State<LoginPage> {
       );
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Test()),
+        MaterialPageRoute(builder: (context) => RecipeMenu()),
       );
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
+        _isLoading = false; // Hide loading indicator on error
       });
     }
   }
@@ -69,14 +73,14 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     labelText: "Email",
                     labelStyle: TextStyle(color: Colors.grey[700]),
-                    prefixIconColor: Color(0xFFF96163),
-                    border: const OutlineInputBorder(),
                     prefixIcon: const Icon(Icons.email),
+                    prefixIconColor: const Color(0xFFF96163),
+                    border: const OutlineInputBorder(),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF96163)),
+                      borderSide: BorderSide(color: const Color(0xFFF96163)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF96163)),
+                      borderSide: BorderSide(color: const Color(0xFFF96163)),
                     ),
                   ),
                 ),
@@ -92,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                         labelText: "Password",
                         labelStyle: TextStyle(color: Colors.grey[700]),
                         prefixIcon: const Icon(Icons.lock),
-                        prefixIconColor: Color(0xFFF96163),
+                        prefixIconColor: const Color(0xFFF96163),
                         suffixIcon: IconButton(
                           icon: Icon(isObscure ? Icons.visibility : Icons.visibility_off),
                           onPressed: () {
@@ -100,10 +104,10 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFFF96163)),
+                          borderSide: BorderSide(color: const Color(0xFFF96163)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFFF96163)),
+                          borderSide: BorderSide(color: const Color(0xFFF96163)),
                         ),
                       ),
                     );
@@ -113,27 +117,30 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 10),
                   Text(
                     _errorMessage!,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ],
                 const SizedBox(height: 40),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFF96163),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: double.infinity,
-                  child: MaterialButton(
-                    onPressed: _login,
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                if (_isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF96163),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    width: double.infinity,
+                    child: MaterialButton(
+                      onPressed: _login,
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
