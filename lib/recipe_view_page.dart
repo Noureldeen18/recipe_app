@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 import 'dio_helper.dart';
 
 class MealDetailScreen extends StatefulWidget {
@@ -15,8 +13,7 @@ class MealDetailScreen extends StatefulWidget {
 class _MealDetailScreenState extends State<MealDetailScreen> {
   Map<String, dynamic>? mealDetails;
   Set<String> favoriteMeals = Set<String>();
-  List<Map<String, String>> meals = []; // Store meals for the selected category
-
+  List<Map<String, String>> meals = [];
 
   @override
   void initState() {
@@ -24,7 +21,6 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
     fetchMealDetails();
   }
 
-  // Fetch meal details using the meal ID
   void fetchMealDetails() {
     DioHelper.getData(
       url: 'api/json/v1/1/lookup.php',
@@ -81,7 +77,6 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   : Colors.grey,
             ),
           )
-
         ],
       ),
       body: mealDetails == null
@@ -115,7 +110,6 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                 ),
               ),
             ),
-            // Display ingredients
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -124,8 +118,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   String? ingredient = mealDetails!['strIngredient${index + 1}'];
                   String? measure = mealDetails!['strMeasure${index + 1}'];
                   if (ingredient != null && ingredient.isNotEmpty) {
-                    return Text(
-                        '- $ingredient (${measure ?? ''})');
+                    return Text('- $ingredient (${measure ?? ''})');
                   }
                   return const SizedBox();
                 }),
