@@ -11,7 +11,7 @@ class Test extends StatefulWidget {
 
 class _MenuViewState extends State<Test> {
   List<String> categories = [];
-  List<Map<String, String>> meals = []; // Store meals for the selected category
+  List<Map<String, String>> meals = [];
   int _selectedIndex = 0;
   Set<String> favoriteMeals = Set<String>();
 
@@ -21,13 +21,13 @@ class _MenuViewState extends State<Test> {
     fetchCategories();
   }
 
-  // Fetch categories from the API
+
   void fetchCategories() {
     DioHelper.getData(url: 'api/json/v1/1/categories.php').then((value) {
       setState(() {
         categories = List<String>.from(value?.data['categories'].map((category) => category['strCategory']));
       });
-      // After fetching categories, fetch meals for the default (first) category
+
       fetchMeals(categories[0]);
     }).catchError((error) {
       print(error.toString());
