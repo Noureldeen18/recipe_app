@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Add Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recipe_app/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -14,18 +14,17 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  bool _isPasswordObscured = true; // Control the password visibility for password field
-  bool _isConfirmPasswordObscured = true; // Control the password visibility for confirm password field
+  bool _isPasswordObscured = true;
+  bool _isConfirmPasswordObscured = true;
   String? _errorMessage;
-  bool _isLoading = false; // Track loading state
+  bool _isLoading = false;
 
   Future<void> _register() async {
     setState(() {
-      _errorMessage = null; // Clear previous error message
-      _isLoading = true;    // Show loading indicator
+      _errorMessage = null;
+      _isLoading = true;
     });
 
-    // Validate input
     if (_nameController.text.isEmpty ||
         _emailController.text.isEmpty ||
         _passwordController.text.isEmpty ||
@@ -37,7 +36,6 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Check if passwords match
     if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
       setState(() {
         _errorMessage = "Passwords do not match.";
@@ -47,23 +45,19 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     try {
-      // Create user with email and password
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      // Update user's display name in Firebase Authentication
       await userCredential.user?.updateProfile(displayName: _nameController.text.trim());
 
-      // Save user information in Firestore
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
         'name': _nameController.text.trim(),
         'email': _emailController.text.trim(),
         'createdAt': DateTime.now(),
       });
 
-      // Navigate to the login page after successful registration
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -74,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     } finally {
       setState(() {
-        _isLoading = false; // Hide loading indicator
+        _isLoading = false;
       });
     }
   }
@@ -98,7 +92,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                // Name TextField with custom styles
                 TextField(
                   controller: _nameController,
                   decoration: InputDecoration(
@@ -116,7 +109,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Email TextField with custom styles
                 TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -135,7 +127,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Password TextField with custom styles and Eye Icon
                 TextField(
                   controller: _passwordController,
                   obscureText: _isPasswordObscured,
@@ -164,7 +155,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Confirm Password TextField with custom styles and Eye Icon
                 TextField(
                   controller: _confirmPasswordController,
                   obscureText: _isConfirmPasswordObscured,
@@ -200,7 +190,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ],
                 const SizedBox(height: 40),
-                // Show a loading spinner when registering
                 if (_isLoading)
                   const Center(child: CircularProgressIndicator())
                 else

@@ -18,11 +18,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     setState(() {
-      _errorMessage = null; // Clear previous error message
-      _isLoading = true;    // Show loading indicator
+      _errorMessage = null;
+      _isLoading = true;
     });
 
-    // Validate input
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       setState(() {
         _errorMessage = "Please fill in all fields.";
@@ -43,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
-        _isLoading = false; // Hide loading indicator on error
+        _isLoading = false;
       });
     }
   }

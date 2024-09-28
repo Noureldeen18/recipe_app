@@ -18,22 +18,18 @@ class _ProfilePageState extends State<ProfilePage> {
   String? _newPhotoUrl;
 
   Future<void> _changePhoto() async {
-    // Pick an image from the gallery
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
       File file = File(image.path);
 
-      // Upload image to Firebase Storage
       try {
         String fileName = 'profile_photos/${user!.uid}.jpg';
         Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
         await storageRef.putFile(file);
 
-        // Get the download URL of the uploaded image
         String photoUrl = await storageRef.getDownloadURL();
 
-        // Update the photoUrl in Firestore
         await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
           'photoUrl': photoUrl,
         });
@@ -41,9 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           _newPhotoUrl = photoUrl;
         });
-
       } catch (e) {
-        // Handle errors if the upload fails
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error uploading photo: $e')),
         );
@@ -53,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _logout() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushReplacementNamed('/login'); // Redirect to login after logout
+    Navigator.of(context).pushReplacementNamed('/login');
   }
 
   void _editProfile() {
@@ -86,17 +80,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      // Profile Photo
                       CircleAvatar(
                         radius: 60,
                         backgroundImage: _newPhotoUrl != null
-                            ? NetworkImage(_newPhotoUrl!) // Display the new photo if uploaded
+                            ? NetworkImage(_newPhotoUrl!)
                             : (userData['photoUrl'] != null && userData['photoUrl'].isNotEmpty)
-                            ? NetworkImage(userData['photoUrl']) // Display the existing photo
-                            : const AssetImage('assets/default_profile.png') as ImageProvider, // Default placeholder
+                            ? NetworkImage(userData['photoUrl'])
+                            : const AssetImage('assets/default_profile.png') as ImageProvider,
                       ),
                       const SizedBox(height: 10),
-                      // Change Photo Button
                       TextButton(
                         onPressed: _changePhoto,
                         child: const Text(
@@ -109,7 +101,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // User Name
                       Text(
                         userData['name'] ?? 'No Name',
                         style: const TextStyle(
@@ -118,24 +109,21 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      // User Email
                       Text(
                         userData['email'] ?? 'No Email',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 30),
-                      // Edit Profile Button
                       ElevatedButton.icon(
                         onPressed: _editProfile,
                         icon: const Icon(Icons.edit, color: Colors.white),
                         label: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFf96163), // Your primary color
+                          backgroundColor: const Color(0xFFf96163),
                           minimumSize: const Size(double.infinity, 50),
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // Logout Button
                       ElevatedButton.icon(
                         onPressed: _logout,
                         icon: const Icon(Icons.logout, color: Colors.white),

@@ -11,7 +11,7 @@ class RecipeMenu extends StatefulWidget {
 
 class _MenuViewState extends State<RecipeMenu> {
   List<String> categories = [];
-  List<Map<String, String>> meals = []; // Store meals for the selected category
+  List<Map<String, String>> meals = [];
   int _selectedIndex = 0;
   Set<String> favoriteMeals = Set<String>();
 
@@ -21,21 +21,18 @@ class _MenuViewState extends State<RecipeMenu> {
     fetchCategories();
   }
 
-  // Fetch categories from the API
   void fetchCategories() {
     DioHelper.getData(url: 'api/json/v1/1/categories.php').then((value) {
       setState(() {
         categories = List<String>.from(value?.data['categories']
             .map((category) => category['strCategory']));
       });
-      // After fetching categories, fetch meals for the default (first) category
       fetchMeals(categories[0]);
     }).catchError((error) {
       print(error.toString());
     });
   }
 
-  // Fetch meals from the API based on the selected category
   void fetchMeals(String category) {
     DioHelper.getData(
       url: 'api/json/v1/1/filter.php',
@@ -57,7 +54,7 @@ class _MenuViewState extends State<RecipeMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView( // Make the entire content scrollable
+    return SingleChildScrollView(
       child: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +81,6 @@ class _MenuViewState extends State<RecipeMenu> {
               ),
             ),
             const SizedBox(height: 20),
-            // Display category buttons
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -96,7 +92,7 @@ class _MenuViewState extends State<RecipeMenu> {
                         setState(() {
                           _selectedIndex = index;
                         });
-                        fetchMeals(categories[index]); // Fetch meals when a category is selected
+                        fetchMeals(categories[index]);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _selectedIndex == index
@@ -110,24 +106,22 @@ class _MenuViewState extends State<RecipeMenu> {
               ),
             ),
             const SizedBox(height: 20),
-            // Display meals in a GridView
             GridView.builder(
               padding: const EdgeInsets.all(10.0),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 items per row
+                crossAxisCount: 2,
                 crossAxisSpacing: 5.0,
                 mainAxisSpacing: 5.0,
               ),
               itemCount: meals.length,
-              physics: const NeverScrollableScrollPhysics(), // Disable scrolling for the GridView
-              shrinkWrap: true, // Use the height of the GridView based on its children
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
               itemBuilder: (context, index) {
                 final meal = meals[index];
                 final isFavorite = favoriteMeals.contains(meal['idMeal']!);
-        
+
                 return GestureDetector(
                   onTap: () {
-                    // Navigate to MealDetailScreen when a meal is clicked
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -141,7 +135,6 @@ class _MenuViewState extends State<RecipeMenu> {
                     elevation: 3.0,
                     child: Stack(
                       children: [
-                        // Image
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -166,7 +159,6 @@ class _MenuViewState extends State<RecipeMenu> {
                             const SizedBox(height: 10),
                           ],
                         ),
-                        // Favorite icon in the top-right corner of the image
                         Positioned(
                           top: 8,
                           right: 8,
