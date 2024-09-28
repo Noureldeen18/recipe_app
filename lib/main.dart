@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Recipe App',
       theme: ThemeData(
         primaryColor: const Color(0xFFf96163),
+        scaffoldBackgroundColor: Colors.white, // Set default background color
         fontFamily: 'Poppins',
       ),
       home: const AuthWrapper(),
@@ -59,12 +60,15 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    // Check if user is logged in
     User? user = FirebaseAuth.instance.currentUser;
 
     // If the user is not logged in, navigate to LoginPage
     if (user == null) {
-      return LoginPage();
+      return LoginPage(
+        onLogin: () {
+          setState(() {}); // Trigger a rebuild after login
+        },
+      );
     }
 
     return Scaffold(

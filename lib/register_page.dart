@@ -60,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => LoginPage(onLogin: (){},)),
       );
     } catch (e) {
       setState(() {
@@ -222,7 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => LoginPage(onLogin: (){})),
                         );
                       },
                       child: const Text(

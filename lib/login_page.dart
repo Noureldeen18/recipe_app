@@ -4,6 +4,10 @@ import 'package:recipe_app/recipe_menu_page.dart';
 import 'package:recipe_app/register_page.dart';
 
 class LoginPage extends StatefulWidget {
+  final VoidCallback onLogin;
+
+  const LoginPage({Key? key, required this.onLogin}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -35,10 +39,7 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => RecipeMenu()),
-      );
+      widget.onLogin(); // Call the callback to refresh the AuthWrapper
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
