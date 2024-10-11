@@ -1,10 +1,13 @@
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'dio_helper.dart';
 
 class MealDetailScreen extends StatefulWidget {
   final String idMeal;
 
-  const MealDetailScreen({super.key, required this.idMeal});
+  MealDetailScreen({required this.idMeal});
 
   @override
   _MealDetailScreenState createState() => _MealDetailScreenState();
@@ -13,12 +16,14 @@ class MealDetailScreen extends StatefulWidget {
 class _MealDetailScreenState extends State<MealDetailScreen> {
   Map<String, dynamic>? mealDetails;
   Set<String> favoriteMeals = Set<String>();
-  List<Map<String, String>> meals = [];
+  double? savedRating;
 
   @override
   void initState() {
     super.initState();
     fetchMealDetails();
+    loadSavedRating();
+    loadFavorites();  // Load favorites when screen opens
   }
 
   void fetchMealDetails() {
@@ -34,40 +39,66 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
     });
   }
 
+  void _launchUrl(String url) async {
+    Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void loadSavedRating() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      savedRating = prefs.getDouble(widget.idMeal) ?? 0.0;
+    });
+  }
+
+  void saveRating(double rating) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble(widget.idMeal, rating);
+    setState(() {
+      savedRating = rating;
+    });
+  }
+
+  // Toggle favorite and update SharedPreferences
+  Future<void> toggleFavorite(String mealId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (favoriteMeals.contains(mealId)) {
+      favoriteMeals.remove(mealId);
+    } else {
+      favoriteMeals.add(mealId);
+    }
+
+    await prefs.setStringList('favoriteMeals', favoriteMeals.toList());
+    setState(() {});
+  }
+
+  // Load favorite meals from SharedPreferences
+  Future<void> loadFavorites() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? savedFavorites = prefs.getStringList('favoriteMeals');
+    if (savedFavorites != null) {
+      setState(() {
+        favoriteMeals = savedFavorites.toSet();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xfffdcbcb),
+        backgroundColor: Color(0xfffdcbcb),
         title: Text(mealDetails != null ? mealDetails!['strMeal'] : 'Loading...'),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
               if (mealDetails != null) {
-                final isFavorite = favoriteMeals.contains(mealDetails!['idMeal']);
-
-                setState(() {
-                  if (isFavorite) {
-                    favoriteMeals.remove(mealDetails!['idMeal']);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Removed from Favorites"),
-                        duration: Duration(seconds: 2),
-                        backgroundColor: Colors.black.withOpacity(0.5),
-                      ),
-                    );
-                  } else {
-                    favoriteMeals.add(mealDetails!['idMeal']);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Added To Favorites"),
-                        duration: Duration(seconds: 2),
-                        backgroundColor: Colors.black.withOpacity(0.5),
-                      ),
-                    );
-                  }
-                });
+                toggleFavorite(mealDetails!['idMeal']);
               }
             },
             icon: Icon(
@@ -76,11 +107,11 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   ? Colors.red
                   : Colors.grey,
             ),
-          )
+          ),
         ],
       ),
       body: mealDetails == null
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,14 +125,14 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 mealDetails!['strMeal'],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Text(
                 'Ingredients',
                 style: TextStyle(
@@ -120,12 +151,12 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   if (ingredient != null && ingredient.isNotEmpty) {
                     return Text('- $ingredient (${measure ?? ''})');
                   }
-                  return const SizedBox();
+                  return SizedBox();
                 }),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Text(
                 'Instructions',
                 style: TextStyle(
@@ -138,6 +169,44 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(mealDetails!['strInstructions']),
             ),
+            SizedBox(height: 30),
+            TextButton(
+              onPressed: () {
+                if (mealDetails!['strYoutube'] != null && mealDetails!['strYoutube'].isNotEmpty) {
+                  _launchUrl(mealDetails!['strYoutube']);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("No video available for this recipe"),
+                    ),
+                  );
+                }
+              },
+              child: Text('Watch Recipe Video'),
+            ),
+            SizedBox(height: 20,),
+            Center(
+              child: Text("Rate the recipe",
+                style: TextStyle(fontWeight: FontWeight.bold,
+                    fontSize: 20),),
+            ),
+            SizedBox(height: 30,),
+            Center(
+              child: RatingBar.builder(
+                minRating: 1,
+                allowHalfRating: true,
+                itemPadding: EdgeInsets.symmetric(horizontal: 3),
+                direction: Axis.horizontal,
+                itemBuilder: (context, _) =>
+                    Icon(Icons.star, color: Color(0xFFEE3625)),
+                onRatingUpdate: (rating) {
+                  saveRating(rating);  // Save the rating
+                  Navigator.pop(context, rating);  // Pass the updated rating back
+                },
+                initialRating: savedRating ?? 0.0, // Show saved rating
+              ),
+            ),
+            SizedBox(height: 40),
           ],
         ),
       ),
