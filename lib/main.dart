@@ -102,9 +102,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
   static const List<Widget> _pages = <Widget>[
     RecipeMenu(),
     SearchPage(),
+    UserDisp(),
     FavoritesPage(),
     ProfilePage(),
-    UserDisp(),
   ];
 
   void _onItemTapped(int index) {
