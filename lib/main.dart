@@ -6,6 +6,7 @@ import 'package:recipe_app/profile_page.dart';
 import 'package:recipe_app/recipe_menu_page.dart';
 import 'package:recipe_app/register_page.dart';
 import 'package:recipe_app/search_page.dart';
+import 'package:recipe_app/user_display_recipe.dart';
 import 'dio_helper.dart';
 
 void main() async {
@@ -103,6 +104,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
     SearchPage(),
     FavoritesPage(),
     ProfilePage(),
+    UserDisp(),
   ];
 
   void _onItemTapped(int index) {
@@ -137,6 +139,10 @@ class _AuthWrapperState extends State<AuthWrapper> {
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.accessibility),
+            label: 'User Recipes',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),

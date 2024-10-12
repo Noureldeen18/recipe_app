@@ -3,6 +3,9 @@ import 'package:recipe_app/recipe_class.dart';
 import 'user_add_recipe.dart'; // Ensure this imports the file with your UserAdd widget and Recipe class
 
 class UserDisp extends StatefulWidget {
+  const UserDisp({super.key});
+
+
   @override
   _UserDispState createState() => _UserDispState();
 }
