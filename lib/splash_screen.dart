@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recipe_app/favorites_page.dart';
 import 'package:recipe_app/profile_page.dart';
 import 'package:recipe_app/recipe_menu_page.dart';
-import 'package:recipe_app/register_page.dart';
 import 'package:recipe_app/search_page.dart';
 import 'dio_helper.dart';
 
@@ -28,61 +26,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white, // Set default background color
         fontFamily: 'Poppins',
       ),
-      home: SplashScreen(), // استخدام SplashScreen كواجهة رئيسية
-    );
-  }
-}
-
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // بعد 3 ثواني، انتقل إلى صفحة Register
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const AuthWrapper()), // الانتقال إلى AuthWrapper
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // إضافة الأيقونة هنا
-            const Icon(
-              Icons.fastfood,
-              size: 100,
-              color: Color(0xFFf96163),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "Created by:",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            const Text("Ahmed Abotalib",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 10),
-            const Text("Nour Aldeen",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 10),
-            const Text("Seif Aldeen",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 40),
-            const CircularProgressIndicator(),
-          ],
-        ),
-      ),
+      home: const AuthWrapper(), // Start with AuthWrapper for navigation
     );
   }
 }
@@ -113,14 +57,11 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    // If the user is not logged in, navigate to RegisterPage
-    if (user == null) {
-      return RegisterPage(); // الانتقال إلى صفحة التسجيل مباشرة
-    }
-
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Recipe App'),
+        backgroundColor: const Color(0xFFf96163), // استخدام اللون الأساسي
+      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
