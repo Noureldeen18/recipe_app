@@ -20,7 +20,7 @@ class _UserAddState extends State<UserAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "Add Recipe",
             style: TextStyle(
               fontSize: 24,
@@ -36,16 +36,16 @@ class _UserAddState extends State<UserAdd> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                       children: [
-                        Text(
+                        const Text(
                           "Add Recipe",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: "Enter Recipe Name",
                             border: OutlineInputBorder(borderSide: BorderSide()),
                           ),
@@ -61,16 +61,16 @@ class _UserAddState extends State<UserAdd> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Ingredient'),
+                          decoration: const InputDecoration(labelText: 'Ingredient'),
                           onChanged: (value) {
                             setState(() {
                               ingredient = value;
                             });
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
                             if (ingredient.isNotEmpty) {
@@ -80,7 +80,7 @@ class _UserAddState extends State<UserAdd> {
                               });
                             }
                           },
-                          child: Text('Add Ingredient'),
+                          child: const Text('Add Ingredient'),
                         ),
                         // Display the list of ingredients
                         if (ingredients.isNotEmpty)
@@ -92,7 +92,7 @@ class _UserAddState extends State<UserAdd> {
                                 return ListTile(
                                   title: Text(ingredient),
                                   trailing: IconButton(
-                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    icon: const Icon(Icons.delete, color: Colors.red),
                                     onPressed: () {
                                       setState(() {
                                         ingredients.remove(ingredient);
@@ -103,9 +103,9 @@ class _UserAddState extends State<UserAdd> {
                               }).toList(),
                             ),
                           ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Instructions'),
+                          decoration: const InputDecoration(labelText: 'Instructions'),
                           onChanged: (value) {
                             setState(() {
                               instructions = value;
@@ -118,7 +118,7 @@ class _UserAddState extends State<UserAdd> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate() && ingredients.isNotEmpty) {
@@ -136,7 +136,7 @@ class _UserAddState extends State<UserAdd> {
                             }
                           },
 
-                          child: Text('Submit'),
+                          child: const Text('Submit'),
                         ),
                       ]
                   ),

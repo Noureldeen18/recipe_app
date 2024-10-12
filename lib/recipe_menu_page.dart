@@ -141,7 +141,7 @@ class _MenuViewState extends State<RecipeMenu> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _selectedIndex == index
-                              ? const Color(0xFFEE3625)
+                              ? const Color(0xffee3625)
                               : Colors.grey,
                         ),
                         child: Text(categories[index]),

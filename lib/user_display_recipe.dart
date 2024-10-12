@@ -20,7 +20,7 @@ class _UserDispState extends State<UserDisp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("User Recipes"),
+        title: const Text("User Recipes"),
       ),
       body: ListView.builder(
         itemCount: recipes.length,
@@ -43,7 +43,7 @@ class _UserDispState extends State<UserDisp> {
             _addRecipe(newRecipe);
           }
         },
-        child: Icon(Icons.add,color: Color(0xFFEE3625),),
+        child: const Icon(Icons.add,color: Color(0xFFEE3625),),
         tooltip: "Add Recipe",
       ),
     );

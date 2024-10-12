@@ -91,7 +91,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xfffdcbcb),
+        backgroundColor: Color(0xffee3625),
         title: Text(mealDetails != null ? mealDetails!['strMeal'] : 'Loading...'),
         centerTitle: true,
         actions: [
