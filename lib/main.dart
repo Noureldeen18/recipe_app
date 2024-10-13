@@ -106,7 +106,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
     // If the user is not logged in, navigate to RegisterPage
     if (user == null) {
-      return RegisterPage(); // الانتقال إلى صفحة التسجيل مباشرة
+      return Register(); // الانتقال إلى صفحة التسجيل مباشرة
     }
 
     return Scaffold(

@@ -36,14 +36,8 @@ class _UserAddState extends State<UserAdd> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                       children: [
-                        const Text(
-                          "Add Recipe",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
+
+                      //  const SizedBox(height: 20),
                         TextFormField(
                           decoration: const InputDecoration(
                             labelText: "Enter Recipe Name",
