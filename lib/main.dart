@@ -62,13 +62,10 @@ class _SplashScreenState extends State<SplashScreen> {
             // إضافة الأيقونة هنا
             const Image(
               image: AssetImage('assets/White_background.png'),
-              width: 100,
-              height: 100,
-              color: Color(0xFFf96163),
+              width: 300,
+              height: 300,
             ),
-            const SizedBox(height: 20),
-            const Text("Cooksy",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+
 
             const CircularProgressIndicator(),
           ],
