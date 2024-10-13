@@ -60,26 +60,16 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // إضافة الأيقونة هنا
-            const Icon(
-              Icons.fastfood,
-              size: 100,
+            const Image(
+              image: AssetImage('assets/White_background.png'),
+              width: 100,
+              height: 100,
               color: Color(0xFFf96163),
             ),
             const SizedBox(height: 20),
-            const Text(
-              "Created by:",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            const Text("Ahmed Abotalib",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 10),
-            const Text("Nour Aldeen",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 10),
-            const Text("Seif Aldeen",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 40),
+            const Text("Cooksy",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+
             const CircularProgressIndicator(),
           ],
         ),
