@@ -35,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
 
         setState(() {
-          _newPhotoUrl = photoUrl;
+          _newPhotoUrl = photoUrl; // تحديث الرابط الجديد للصورة
         });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -51,7 +51,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _editProfile() {
-    Navigator.of(context).pushNamed('/edit-profile');
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const EditProfilePage()),
+    );
   }
 
   @override
@@ -139,6 +141,221 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class EditProfilePage extends StatefulWidget {
+  const EditProfilePage({super.key});
+
+  @override
+  _EditProfilePageState createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+  final User? user = FirebaseAuth.instance.currentUser;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _oldPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  String? _errorMessage;
+  bool _isLoading = false;
+
+  Future<void> _updateProfile() async {
+    if (_nameController.text.isNotEmpty) {
+      setState(() {
+        _errorMessage = null;
+        _isLoading = true; // بدء التحميل
+      });
+
+      try {
+        // تحديث اسم المستخدم
+        await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
+          'name': _nameController.text.trim(),
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile name updated successfully!')),
+        );
+      } catch (e) {
+        setState(() {
+          _errorMessage = e.toString(); // التعامل مع الخطأ
+        });
+      }
+    } else {
+      setState(() {
+        _errorMessage = "Please enter a name."; // رسالة الخطأ
+      });
+    }
+  }
+
+  Future<void> _changePassword() async {
+    if (_oldPasswordController.text.isNotEmpty && _newPasswordController.text.isNotEmpty && _confirmPasswordController.text.isNotEmpty) {
+      if (_newPasswordController.text == _confirmPasswordController.text) {
+        try {
+          // إعادة تسجيل الدخول باستخدام كلمة المرور القديمة
+          final credential = EmailAuthProvider.credential(email: user!.email!, password: _oldPasswordController.text.trim());
+          await user!.reauthenticateWithCredential(credential);
+
+          // تغيير كلمة المرور
+          await user!.updatePassword(_newPasswordController.text.trim());
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Password changed successfully!')),
+          );
+
+          // إعادة تعيين الحقول
+          _oldPasswordController.clear();
+          _newPasswordController.clear();
+          _confirmPasswordController.clear();
+        } catch (e) {
+          setState(() {
+            _errorMessage = e.toString(); // التعامل مع الخطأ
+          });
+        }
+      } else {
+        setState(() {
+          _errorMessage = "New passwords do not match."; // رسالة الخطأ
+        });
+      }
+    } else {
+      setState(() {
+        _errorMessage = "Please fill in all fields."; // رسالة الخطأ
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // جلب اسم المستخدم الحالي
+    FirebaseFirestore.instance.collection('users').doc(user!.uid).get().then((snapshot) {
+      if (snapshot.exists) {
+        setState(() {
+          _nameController.text = snapshot.data()?['name'] ?? '';
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Profile'),
+        backgroundColor: const Color(0xFFf96163),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Edit your profile",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff36444c),
+                ),
+              ),
+              const SizedBox(height: 30),
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  labelStyle: TextStyle(color: Colors.grey[700]),
+                  border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: const Color(0xFFF96163)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: const Color(0xFFF96163)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _oldPasswordController,
+                decoration: InputDecoration(
+                  labelText: "Old Password",
+                  labelStyle: TextStyle(color: Colors.grey[700]),
+                  border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: const Color(0xFFF96163)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: const Color(0xFFF96163)),
+                  ),
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _newPasswordController,
+                decoration: InputDecoration(
+                  labelText: "New Password",
+                  labelStyle: TextStyle(color: Colors.grey[700]),
+                  border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: const Color(0xFFF96163)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: const Color(0xFFF96163)),
+                  ),
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _confirmPasswordController,
+                decoration: InputDecoration(
+                  labelText: "Confirm Password",
+                  labelStyle: TextStyle(color: Colors.grey[700]),
+                  border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: const Color(0xFFF96163)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: const Color(0xFFF96163)),
+                  ),
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              if (_errorMessage != null)
+                Text(
+                  _errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              const SizedBox(height: 20),
+              if (_isLoading)
+                const Center(child: CircularProgressIndicator())
+              else
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF96163),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  width: double.infinity,
+                  child: MaterialButton(
+                    onPressed: () {
+                      _updateProfile();
+                      _changePassword();
+                    },
+                    child: const Text(
+                      "Update Profile",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
